@@ -96,4 +96,18 @@ describe SimpleCovLcov::Configuration do
       end
     end
   end
+
+  describe '#no_dot_slash_prefix?' do
+    context 'when no customisations are made' do
+      it { is_expected.not_to be_no_dot_slash_prefix }
+    end
+
+    context 'when no_dot_slash_prefix set to true' do
+      before do
+        configuration.no_dot_slash_prefix = true
+      end
+
+      it { is_expected.to be_no_dot_slash_prefix }
+    end
+  end
 end

@@ -2,7 +2,7 @@ require 'fileutils'
 require 'pathname'
 require_relative 'simple_cov_lcov/configuration'
 
-fail 'simplecov-lcov requires simplecov' unless defined?(SimpleCov)
+raise 'simplecov-lcov requires simplecov' unless defined?(SimpleCov)
 
 module SimpleCov
   module Formatter
@@ -59,8 +59,13 @@ module SimpleCov
         self.class.config.single_report_path
       end
 
+      def no_dot_slash_prefix?
+        self.class.config.no_dot_slash_prefix?
+      end
+
       def create_output_directory!
         return if Dir.exist?(output_directory)
+
         FileUtils.mkdir_p(output_directory)
       end
 
@@ -78,11 +83,11 @@ module SimpleCov
 
       def output_filename(filename)
         filename.gsub("#{SimpleCov.root}/", '').gsub('/', '-')
-          .tap { |name| name << '.lcov' }
+                .tap { |name| name << '.lcov' }
       end
 
       def format_file(file)
-        filename = file.filename.gsub("#{SimpleCov.root}/", './')
+        filename = file.filename.gsub("#{SimpleCov.root}/", no_dot_slash_prefix? ? '' : './')
         pieces = []
         pieces << "SF:#{filename}"
         pieces << format_lines(file)
@@ -93,8 +98,8 @@ module SimpleCov
           pieces << "BRF:#{file.total_branches.length}"
           pieces << "BRH:#{file.covered_branches.length}"
         end
-        pieces << "end_of_record"
-        pieces << ""
+        pieces << 'end_of_record'
+        pieces << ''
         pieces.join("\n")
       end
 

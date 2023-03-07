@@ -98,6 +98,26 @@ module SimpleCov::Formatter
           it { expect(File.read(output_path)).to match(fixture_of_hoge) }
           it { expect(File.read(output_path)).to match(fixture_of_user) }
         end
+
+        describe 'with `no_dot_slash_prefix`' do
+          before {
+            LcovFormatter.config.no_dot_slash_prefix = true
+          }
+
+          let(:output_path) {
+            LcovFormatter.config.single_report_path
+          }
+          let(:fixture_of_hoge) {
+            File.read("#{File.dirname(__FILE__)}/fixtures/lcov/spec-fixtures-hoge.rb.lcov")
+                .gsub(' ./', ' ')
+          }
+          let(:fixture_of_user) {
+            File.read("#{File.dirname(__FILE__)}/fixtures/lcov/spec-fixtures-app-models-user.rb.lcov")
+                .gsub(' ./', ' ')
+          }
+          it { expect(File.read(output_path)).to match(fixture_of_hoge) }
+          it { expect(File.read(output_path)).to match(fixture_of_user) }
+        end
       end
     end
   end

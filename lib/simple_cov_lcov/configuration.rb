@@ -3,6 +3,7 @@ module SimpleCovLcov
     attr_writer :report_with_single_file
     attr_writer :output_directory
     attr_writer :lcov_file_name
+    attr_writer :no_dot_slash_prefix
 
     def report_with_single_file?
       !!@report_with_single_file
@@ -23,6 +24,10 @@ module SimpleCovLcov
 
     def lcov_file_name
       @lcov_file_name || "#{Pathname.new(SimpleCov.root).basename}.lcov"
+    end
+
+    def no_dot_slash_prefix?
+      !!@no_dot_slash_prefix
     end
   end
 end
